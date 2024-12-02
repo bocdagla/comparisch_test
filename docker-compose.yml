@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+  coding-session-fe:
+    build:
+      context: ./coding-session-fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    networks:
+      - app-network
+
+  coding-session-be:
+    build:
+      context: ./coding-session-be 
+      dockerfile: Dockerfile
+    ports:
+      - "7000:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,35 @@
+version: '3.4'
+services:
+  coding-session-fe:
+    build:
+      context: ./coding-session-fe
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./coding-session-fe:/usr/src/app
+      - /usr/src/app/node_modules  # Avoid mounting node_modules, ensures proper dependencies
+    environment:
+      NODE_ENV: development
+    command: npm run dev  # or the command for running your app in dev mode (e.g., next dev for Next.js)
+    networks:
+      - app-network
+
+  coding-session-be:
+    build:
+      context: ./coding-session-be
+      dockerfile: Dockerfile
+    ports:
+      - "7000:8080"
+    volumes:
+      - ./coding-session-be:/usr/src/app
+      - /usr/src/app/bin  # Avoid mounting binaries if they are built inside the container
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    command: dotnet watch run  # For .NET development, use watch to auto-reload on changes
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
